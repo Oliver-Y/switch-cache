@@ -1,0 +1,115 @@
+# proto-file: p4/config/v1/p4info.proto
+# proto-message: p4.config.v1.P4Info
+
+pkg_info {
+  arch: "v1model"
+}
+tables {
+  preamble {
+    id: 37375156
+    name: "MyIngress.ipv4_lpm"
+    alias: "ipv4_lpm"
+  }
+  match_fields {
+    id: 1
+    name: "hdr.ipv4.dstAddr"
+    bitwidth: 32
+    match_type: LPM
+  }
+  action_refs {
+    id: 28792405
+  }
+  action_refs {
+    id: 25652968
+  }
+  action_refs {
+    id: 21257015
+  }
+  size: 1024
+}
+tables {
+  preamble {
+    id: 36062068
+    name: "MyIngress.key_cache"
+    alias: "key_cache"
+  }
+  match_fields {
+    id: 1
+    name: "hdr.req.key"
+    bitwidth: 8
+    match_type: EXACT
+  }
+  action_refs {
+    id: 25672210
+  }
+  action_refs {
+    id: 21257015
+  }
+  size: 1024
+}
+actions {
+  preamble {
+    id: 21257015
+    name: "NoAction"
+    alias: "NoAction"
+    annotations: "@noWarn(\"unused\")"
+  }
+}
+actions {
+  preamble {
+    id: 25672210
+    name: "MyIngress.cache_hit"
+    alias: "cache_hit"
+  }
+  params {
+    id: 1
+    name: "valid_val"
+    bitwidth: 8
+  }
+  params {
+    id: 2
+    name: "val"
+    bitwidth: 32
+  }
+}
+actions {
+  preamble {
+    id: 25652968
+    name: "MyIngress.drop"
+    alias: "drop"
+  }
+}
+actions {
+  preamble {
+    id: 28792405
+    name: "MyIngress.ipv4_forward"
+    alias: "ipv4_forward"
+  }
+  params {
+    id: 1
+    name: "dstAddr"
+    bitwidth: 48
+  }
+  params {
+    id: 2
+    name: "port"
+    bitwidth: 9
+  }
+}
+registers {
+  preamble {
+    id: 384561722
+    name: "MyIngress.reg_cache"
+    alias: "reg_cache"
+  }
+  type_spec {
+    bitstring {
+      bit {
+        bitwidth: 40
+      }
+    }
+  }
+  size: 256
+}
+type_info {
+}

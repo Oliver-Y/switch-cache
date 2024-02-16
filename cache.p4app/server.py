@@ -17,7 +17,6 @@ for arg in sys.argv[1:]:
 while True:
     req, addr = s.recvfrom(1024)
     key, = reqHdr.unpack(req)
-
     print(addr, "-> Req(%d),"%key)
 
     if key in store:

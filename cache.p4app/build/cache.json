@@ -1,0 +1,2446 @@
+{
+  "header_types" : [
+    {
+      "name" : "scalars_0",
+      "id" : 0,
+      "fields" : [
+        ["tmp", 32, false],
+        ["tmp_0", 16, false],
+        ["tmp_1", 16, false],
+        ["tmp_2", 32, false],
+        ["tmp_3", 16, false],
+        ["tmp_4", 16, false],
+        ["tmp_5", 8, false],
+        ["tmp_6", 8, false],
+        ["tmp_7", 32, false],
+        ["tmp_8", 16, false],
+        ["tmp_9", 16, false],
+        ["tmp_10", 32, false],
+        ["tmp_11", 40, false],
+        ["tmp_12", 32, false],
+        ["tmp_13", 32, false],
+        ["tmp_14", 16, false],
+        ["tmp_15", 16, false],
+        ["tmp_16", 32, false],
+        ["tmp_17", 32, false],
+        ["temp_0", 32, false],
+        ["temp_2", 40, false],
+        ["valid_val_1", 8, false],
+        ["val_1", 32, false]
+      ]
+    },
+    {
+      "name" : "standard_metadata",
+      "id" : 1,
+      "fields" : [
+        ["ingress_port", 9, false],
+        ["egress_spec", 9, false],
+        ["egress_port", 9, false],
+        ["instance_type", 32, false],
+        ["packet_length", 32, false],
+        ["enq_timestamp", 32, false],
+        ["enq_qdepth", 19, false],
+        ["deq_timedelta", 32, false],
+        ["deq_qdepth", 19, false],
+        ["ingress_global_timestamp", 48, false],
+        ["egress_global_timestamp", 48, false],
+        ["mcast_grp", 16, false],
+        ["egress_rid", 16, false],
+        ["checksum_error", 1, false],
+        ["parser_error", 32, false],
+        ["priority", 3, false],
+        ["_padding", 3, false]
+      ]
+    },
+    {
+      "name" : "ethernet_t",
+      "id" : 2,
+      "fields" : [
+        ["dstAddr", 48, false],
+        ["srcAddr", 48, false],
+        ["etherType", 16, false]
+      ]
+    },
+    {
+      "name" : "ipv4_t",
+      "id" : 3,
+      "fields" : [
+        ["version", 4, false],
+        ["ihl", 4, false],
+        ["diffserv", 8, false],
+        ["totalLen", 16, false],
+        ["identification", 16, false],
+        ["flags", 3, false],
+        ["fragOffset", 13, false],
+        ["ttl", 8, false],
+        ["protocol", 8, false],
+        ["hdrChecksum", 16, false],
+        ["srcAddr", 32, false],
+        ["dstAddr", 32, false]
+      ]
+    },
+    {
+      "name" : "udp_t",
+      "id" : 4,
+      "fields" : [
+        ["srcPort", 16, false],
+        ["dstPort", 16, false],
+        ["len", 16, false],
+        ["checkSum", 16, false]
+      ]
+    },
+    {
+      "name" : "req_t",
+      "id" : 5,
+      "fields" : [
+        ["key", 8, false]
+      ]
+    },
+    {
+      "name" : "resp_t",
+      "id" : 6,
+      "fields" : [
+        ["key", 8, false],
+        ["valid_resp", 8, false],
+        ["value", 32, false]
+      ]
+    }
+  ],
+  "headers" : [
+    {
+      "name" : "scalars",
+      "id" : 0,
+      "header_type" : "scalars_0",
+      "metadata" : true,
+      "pi_omit" : true
+    },
+    {
+      "name" : "standard_metadata",
+      "id" : 1,
+      "header_type" : "standard_metadata",
+      "metadata" : true,
+      "pi_omit" : true
+    },
+    {
+      "name" : "ethernet",
+      "id" : 2,
+      "header_type" : "ethernet_t",
+      "metadata" : false,
+      "pi_omit" : true
+    },
+    {
+      "name" : "ipv4",
+      "id" : 3,
+      "header_type" : "ipv4_t",
+      "metadata" : false,
+      "pi_omit" : true
+    },
+    {
+      "name" : "udp",
+      "id" : 4,
+      "header_type" : "udp_t",
+      "metadata" : false,
+      "pi_omit" : true
+    },
+    {
+      "name" : "req",
+      "id" : 5,
+      "header_type" : "req_t",
+      "metadata" : false,
+      "pi_omit" : true
+    },
+    {
+      "name" : "resp",
+      "id" : 6,
+      "header_type" : "resp_t",
+      "metadata" : false,
+      "pi_omit" : true
+    }
+  ],
+  "header_stacks" : [],
+  "header_union_types" : [],
+  "header_unions" : [],
+  "header_union_stacks" : [],
+  "field_lists" : [],
+  "errors" : [
+    ["NoError", 0],
+    ["PacketTooShort", 1],
+    ["NoMatch", 2],
+    ["StackOutOfBounds", 3],
+    ["HeaderTooShort", 4],
+    ["ParserTimeout", 5],
+    ["ParserInvalidArgument", 6]
+  ],
+  "enums" : [],
+  "parsers" : [
+    {
+      "name" : "parser",
+      "id" : 0,
+      "init_state" : "start",
+      "parse_states" : [
+        {
+          "name" : "start",
+          "id" : 0,
+          "parser_ops" : [
+            {
+              "parameters" : [
+                {
+                  "type" : "regular",
+                  "value" : "ethernet"
+                }
+              ],
+              "op" : "extract"
+            }
+          ],
+          "transitions" : [
+            {
+              "type" : "hexstr",
+              "value" : "0x0800",
+              "mask" : null,
+              "next_state" : "parse_ipv4"
+            },
+            {
+              "type" : "default",
+              "value" : null,
+              "mask" : null,
+              "next_state" : null
+            }
+          ],
+          "transition_key" : [
+            {
+              "type" : "field",
+              "value" : ["ethernet", "etherType"]
+            }
+          ]
+        },
+        {
+          "name" : "parse_ipv4",
+          "id" : 1,
+          "parser_ops" : [
+            {
+              "parameters" : [
+                {
+                  "type" : "regular",
+                  "value" : "ipv4"
+                }
+              ],
+              "op" : "extract"
+            }
+          ],
+          "transitions" : [
+            {
+              "type" : "hexstr",
+              "value" : "0x11",
+              "mask" : null,
+              "next_state" : "parse_udp"
+            },
+            {
+              "type" : "default",
+              "value" : null,
+              "mask" : null,
+              "next_state" : null
+            }
+          ],
+          "transition_key" : [
+            {
+              "type" : "field",
+              "value" : ["ipv4", "protocol"]
+            }
+          ]
+        },
+        {
+          "name" : "parse_udp",
+          "id" : 2,
+          "parser_ops" : [
+            {
+              "parameters" : [
+                {
+                  "type" : "regular",
+                  "value" : "udp"
+                }
+              ],
+              "op" : "extract"
+            }
+          ],
+          "transitions" : [
+            {
+              "type" : "hexstr",
+              "value" : "0x04d2",
+              "mask" : null,
+              "next_state" : "parse_req"
+            },
+            {
+              "type" : "default",
+              "value" : null,
+              "mask" : null,
+              "next_state" : "parse_resp_option"
+            }
+          ],
+          "transition_key" : [
+            {
+              "type" : "field",
+              "value" : ["udp", "dstPort"]
+            }
+          ]
+        },
+        {
+          "name" : "parse_req",
+          "id" : 3,
+          "parser_ops" : [
+            {
+              "parameters" : [
+                {
+                  "type" : "regular",
+                  "value" : "req"
+                }
+              ],
+              "op" : "extract"
+            }
+          ],
+          "transitions" : [
+            {
+              "type" : "default",
+              "value" : null,
+              "mask" : null,
+              "next_state" : null
+            }
+          ],
+          "transition_key" : []
+        },
+        {
+          "name" : "parse_resp_option",
+          "id" : 4,
+          "parser_ops" : [],
+          "transitions" : [
+            {
+              "type" : "hexstr",
+              "value" : "0x04d2",
+              "mask" : null,
+              "next_state" : "parse_resp"
+            },
+            {
+              "type" : "default",
+              "value" : null,
+              "mask" : null,
+              "next_state" : null
+            }
+          ],
+          "transition_key" : [
+            {
+              "type" : "field",
+              "value" : ["udp", "srcPort"]
+            }
+          ]
+        },
+        {
+          "name" : "parse_resp",
+          "id" : 5,
+          "parser_ops" : [
+            {
+              "parameters" : [
+                {
+                  "type" : "regular",
+                  "value" : "resp"
+                }
+              ],
+              "op" : "extract"
+            }
+          ],
+          "transitions" : [
+            {
+              "type" : "default",
+              "value" : null,
+              "mask" : null,
+              "next_state" : null
+            }
+          ],
+          "transition_key" : []
+        }
+      ]
+    }
+  ],
+  "parse_vsets" : [],
+  "deparsers" : [
+    {
+      "name" : "deparser",
+      "id" : 0,
+      "source_info" : {
+        "filename" : "cache.p4",
+        "line" : 222,
+        "column" : 8,
+        "source_fragment" : "MyDeparser"
+      },
+      "order" : ["ethernet", "ipv4", "udp", "resp", "req"],
+      "primitives" : []
+    }
+  ],
+  "meter_arrays" : [],
+  "counter_arrays" : [],
+  "register_arrays" : [
+    {
+      "name" : "MyIngress.reg_cache",
+      "id" : 0,
+      "source_info" : {
+        "filename" : "cache.p4",
+        "line" : 115,
+        "column" : 27,
+        "source_fragment" : "reg_cache"
+      },
+      "size" : 256,
+      "bitwidth" : 40
+    }
+  ],
+  "calculations" : [
+    {
+      "name" : "calc",
+      "id" : 0,
+      "source_info" : {
+        "filename" : "cache.p4",
+        "line" : 204,
+        "column" : 8,
+        "source_fragment" : "update_checksum( ..."
+      },
+      "algo" : "csum16",
+      "input" : [
+        {
+          "type" : "field",
+          "value" : ["ipv4", "version"]
+        },
+        {
+          "type" : "field",
+          "value" : ["ipv4", "ihl"]
+        },
+        {
+          "type" : "field",
+          "value" : ["ipv4", "diffserv"]
+        },
+        {
+          "type" : "field",
+          "value" : ["ipv4", "totalLen"]
+        },
+        {
+          "type" : "field",
+          "value" : ["ipv4", "identification"]
+        },
+        {
+          "type" : "field",
+          "value" : ["ipv4", "flags"]
+        },
+        {
+          "type" : "field",
+          "value" : ["ipv4", "fragOffset"]
+        },
+        {
+          "type" : "field",
+          "value" : ["ipv4", "ttl"]
+        },
+        {
+          "type" : "field",
+          "value" : ["ipv4", "protocol"]
+        },
+        {
+          "type" : "field",
+          "value" : ["ipv4", "srcAddr"]
+        },
+        {
+          "type" : "field",
+          "value" : ["ipv4", "dstAddr"]
+        }
+      ]
+    }
+  ],
+  "learn_lists" : [],
+  "actions" : [
+    {
+      "name" : "NoAction",
+      "id" : 0,
+      "runtime_data" : [],
+      "primitives" : []
+    },
+    {
+      "name" : "NoAction",
+      "id" : 1,
+      "runtime_data" : [],
+      "primitives" : []
+    },
+    {
+      "name" : "MyIngress.cache_hit",
+      "id" : 2,
+      "runtime_data" : [
+        {
+          "name" : "valid_val",
+          "bitwidth" : 8
+        },
+        {
+          "name" : "val",
+          "bitwidth" : 32
+        }
+      ],
+      "primitives" : [
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "temp_0"]
+            },
+            {
+              "type" : "field",
+              "value" : ["ipv4", "dstAddr"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 118,
+            "column" : 8,
+            "source_fragment" : "ip4Addr_t temp = hdr.ipv4.dstAddr;"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["ipv4", "dstAddr"]
+            },
+            {
+              "type" : "field",
+              "value" : ["ipv4", "srcAddr"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 119,
+            "column" : 8,
+            "source_fragment" : "hdr.ipv4.dstAddr = hdr.ipv4.srcAddr"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["ipv4", "srcAddr"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "temp_0"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 120,
+            "column" : 8,
+            "source_fragment" : "hdr.ipv4.srcAddr = temp"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["udp", "dstPort"]
+            },
+            {
+              "type" : "field",
+              "value" : ["udp", "srcPort"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 121,
+            "column" : 8,
+            "source_fragment" : "hdr.udp.dstPort = hdr.udp.srcPort"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["udp", "srcPort"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x04d2"
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 122,
+            "column" : 8,
+            "source_fragment" : "hdr.udp.srcPort = 1234"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["udp", "len"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["udp", "len"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x0005"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 123,
+            "column" : 8,
+            "source_fragment" : "hdr.udp.len = hdr.udp.len + 5"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["ipv4", "totalLen"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["ipv4", "totalLen"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x0005"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 124,
+            "column" : 8,
+            "source_fragment" : "hdr.ipv4.totalLen = hdr.ipv4.totalLen + 5"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["udp", "checkSum"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x0000"
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 125,
+            "column" : 8,
+            "source_fragment" : "hdr.udp.checkSum = 0"
+          }
+        },
+        {
+          "op" : "add_header",
+          "parameters" : [
+            {
+              "type" : "header",
+              "value" : "resp"
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 126,
+            "column" : 8,
+            "source_fragment" : "hdr.resp.setValid()"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["resp", "key"]
+            },
+            {
+              "type" : "field",
+              "value" : ["req", "key"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 127,
+            "column" : 8,
+            "source_fragment" : "hdr.resp.key = hdr.req.key"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["resp", "valid_resp"]
+            },
+            {
+              "type" : "runtime_data",
+              "value" : 0
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 128,
+            "column" : 8,
+            "source_fragment" : "hdr.resp.valid_resp = valid_val"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["resp", "value"]
+            },
+            {
+              "type" : "runtime_data",
+              "value" : 1
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 129,
+            "column" : 8,
+            "source_fragment" : "hdr.resp.value = val"
+          }
+        },
+        {
+          "op" : "remove_header",
+          "parameters" : [
+            {
+              "type" : "header",
+              "value" : "req"
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 130,
+            "column" : 8,
+            "source_fragment" : "hdr.req.setInvalid()"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp"]
+            },
+            {
+              "type" : "runtime_data",
+              "value" : 1
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 131,
+            "column" : 61,
+            "source_fragment" : "        log_msg(\\\"cache hit {}, udp Len: {}, IP Len: {} \\n\\\", {val, hdr.udp.len, hdr.ipv4.totalLen});"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_0"]
+            },
+            {
+              "type" : "field",
+              "value" : ["udp", "len"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 131,
+            "column" : 66,
+            "source_fragment" : "        log_msg(\\\"cache hit {}, udp Len: {}, IP Len: {} \\n\\\", {val, hdr.udp.len, hdr.ipv4.totalLen});"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_1"]
+            },
+            {
+              "type" : "field",
+              "value" : ["ipv4", "totalLen"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 131,
+            "column" : 79,
+            "source_fragment" : "        log_msg(\\\"cache hit {}, udp Len: {}, IP Len: {} \\n\\\", {val, hdr.udp.len, hdr.ipv4.totalLen});"
+          }
+        },
+        {
+          "op" : "log_msg",
+          "parameters" : [
+            {
+              "type" : "string",
+              "value" : "cache hit {}, udp Len: {}, IP Len: {} \n"
+            },
+            {
+              "type" : "parameters_vector",
+              "value" : [
+                {
+                  "type" : "field",
+                  "value" : ["scalars", "tmp"]
+                },
+                {
+                  "type" : "field",
+                  "value" : ["scalars", "tmp_0"]
+                },
+                {
+                  "type" : "field",
+                  "value" : ["scalars", "tmp_1"]
+                }
+              ]
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 131,
+            "column" : 8,
+            "source_fragment" : "        log_msg(\\\"cache hit {}, udp Len: {}, IP Len: {} \\n\\\", {val, hdr.udp.len, hdr.ipv4.totalLen});"
+          }
+        }
+      ]
+    },
+    {
+      "name" : "MyIngress.cache_hit",
+      "id" : 3,
+      "runtime_data" : [],
+      "primitives" : [
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "temp_0"]
+            },
+            {
+              "type" : "field",
+              "value" : ["ipv4", "dstAddr"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 118,
+            "column" : 8,
+            "source_fragment" : "ip4Addr_t temp = hdr.ipv4.dstAddr;"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["ipv4", "dstAddr"]
+            },
+            {
+              "type" : "field",
+              "value" : ["ipv4", "srcAddr"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 119,
+            "column" : 8,
+            "source_fragment" : "hdr.ipv4.dstAddr = hdr.ipv4.srcAddr"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["ipv4", "srcAddr"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "temp_0"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 120,
+            "column" : 8,
+            "source_fragment" : "hdr.ipv4.srcAddr = temp"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["udp", "dstPort"]
+            },
+            {
+              "type" : "field",
+              "value" : ["udp", "srcPort"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 121,
+            "column" : 8,
+            "source_fragment" : "hdr.udp.dstPort = hdr.udp.srcPort"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["udp", "srcPort"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x04d2"
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 122,
+            "column" : 8,
+            "source_fragment" : "hdr.udp.srcPort = 1234"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["udp", "len"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["udp", "len"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x0005"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 123,
+            "column" : 8,
+            "source_fragment" : "hdr.udp.len = hdr.udp.len + 5"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["ipv4", "totalLen"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["ipv4", "totalLen"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x0005"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 124,
+            "column" : 8,
+            "source_fragment" : "hdr.ipv4.totalLen = hdr.ipv4.totalLen + 5"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["udp", "checkSum"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x0000"
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 125,
+            "column" : 8,
+            "source_fragment" : "hdr.udp.checkSum = 0"
+          }
+        },
+        {
+          "op" : "add_header",
+          "parameters" : [
+            {
+              "type" : "header",
+              "value" : "resp"
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 126,
+            "column" : 8,
+            "source_fragment" : "hdr.resp.setValid()"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["resp", "key"]
+            },
+            {
+              "type" : "field",
+              "value" : ["req", "key"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 127,
+            "column" : 8,
+            "source_fragment" : "hdr.resp.key = hdr.req.key"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["resp", "valid_resp"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "valid_val_1"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 128,
+            "column" : 8,
+            "source_fragment" : "hdr.resp.valid_resp = valid_val"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["resp", "value"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "val_1"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 129,
+            "column" : 8,
+            "source_fragment" : "hdr.resp.value = val"
+          }
+        },
+        {
+          "op" : "remove_header",
+          "parameters" : [
+            {
+              "type" : "header",
+              "value" : "req"
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 130,
+            "column" : 8,
+            "source_fragment" : "hdr.req.setInvalid()"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_2"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "val_1"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 131,
+            "column" : 61,
+            "source_fragment" : "        log_msg(\\\"cache hit {}, udp Len: {}, IP Len: {} \\n\\\", {val, hdr.udp.len, hdr.ipv4.totalLen});"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_3"]
+            },
+            {
+              "type" : "field",
+              "value" : ["udp", "len"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 131,
+            "column" : 66,
+            "source_fragment" : "        log_msg(\\\"cache hit {}, udp Len: {}, IP Len: {} \\n\\\", {val, hdr.udp.len, hdr.ipv4.totalLen});"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_4"]
+            },
+            {
+              "type" : "field",
+              "value" : ["ipv4", "totalLen"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 131,
+            "column" : 79,
+            "source_fragment" : "        log_msg(\\\"cache hit {}, udp Len: {}, IP Len: {} \\n\\\", {val, hdr.udp.len, hdr.ipv4.totalLen});"
+          }
+        },
+        {
+          "op" : "log_msg",
+          "parameters" : [
+            {
+              "type" : "string",
+              "value" : "cache hit {}, udp Len: {}, IP Len: {} \n"
+            },
+            {
+              "type" : "parameters_vector",
+              "value" : [
+                {
+                  "type" : "field",
+                  "value" : ["scalars", "tmp_2"]
+                },
+                {
+                  "type" : "field",
+                  "value" : ["scalars", "tmp_3"]
+                },
+                {
+                  "type" : "field",
+                  "value" : ["scalars", "tmp_4"]
+                }
+              ]
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 131,
+            "column" : 8,
+            "source_fragment" : "        log_msg(\\\"cache hit {}, udp Len: {}, IP Len: {} \\n\\\", {val, hdr.udp.len, hdr.ipv4.totalLen});"
+          }
+        }
+      ]
+    },
+    {
+      "name" : "MyIngress.drop",
+      "id" : 4,
+      "runtime_data" : [],
+      "primitives" : [
+        {
+          "op" : "mark_to_drop",
+          "parameters" : [
+            {
+              "type" : "header",
+              "value" : "standard_metadata"
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 135,
+            "column" : 8,
+            "source_fragment" : "mark_to_drop(standard_metadata)"
+          }
+        }
+      ]
+    },
+    {
+      "name" : "MyIngress.ipv4_forward",
+      "id" : 5,
+      "runtime_data" : [
+        {
+          "name" : "dstAddr",
+          "bitwidth" : 48
+        },
+        {
+          "name" : "port",
+          "bitwidth" : 9
+        }
+      ],
+      "primitives" : [
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["standard_metadata", "egress_spec"]
+            },
+            {
+              "type" : "runtime_data",
+              "value" : 1
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 139,
+            "column" : 8,
+            "source_fragment" : "standard_metadata.egress_spec = port"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["ethernet", "srcAddr"]
+            },
+            {
+              "type" : "field",
+              "value" : ["ethernet", "dstAddr"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 140,
+            "column" : 8,
+            "source_fragment" : "hdr.ethernet.srcAddr = hdr.ethernet.dstAddr"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["ethernet", "dstAddr"]
+            },
+            {
+              "type" : "runtime_data",
+              "value" : 0
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 141,
+            "column" : 8,
+            "source_fragment" : "hdr.ethernet.dstAddr = dstAddr"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["ipv4", "ttl"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["ipv4", "ttl"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0xff"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 142,
+            "column" : 8,
+            "source_fragment" : "hdr.ipv4.ttl = hdr.ipv4.ttl - 1"
+          }
+        }
+      ]
+    },
+    {
+      "name" : "cache170",
+      "id" : 6,
+      "runtime_data" : [],
+      "primitives" : [
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_5"]
+            },
+            {
+              "type" : "field",
+              "value" : ["resp", "key"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 170,
+            "column" : 101,
+            "source_fragment" : "            log_msg(\\\"Valid resp header = key: {}, valid: {}, value: {}, UDP len: {}, IP len: {}\\n\\\", {hdr.resp.key, hdr.resp.valid_resp, hdr.resp.value,hdr.udp.len, hdr.ipv4.totalLen});"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_6"]
+            },
+            {
+              "type" : "field",
+              "value" : ["resp", "valid_resp"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 170,
+            "column" : 115,
+            "source_fragment" : "            log_msg(\\\"Valid resp header = key: {}, valid: {}, value: {}, UDP len: {}, IP len: {}\\n\\\", {hdr.resp.key, hdr.resp.valid_resp, hdr.resp.value,hdr.udp.len, hdr.ipv4.totalLen});"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_7"]
+            },
+            {
+              "type" : "field",
+              "value" : ["resp", "value"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 170,
+            "column" : 136,
+            "source_fragment" : "            log_msg(\\\"Valid resp header = key: {}, valid: {}, value: {}, UDP len: {}, IP len: {}\\n\\\", {hdr.resp.key, hdr.resp.valid_resp, hdr.resp.value,hdr.udp.len, hdr.ipv4.totalLen});"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_8"]
+            },
+            {
+              "type" : "field",
+              "value" : ["udp", "len"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 170,
+            "column" : 151,
+            "source_fragment" : "            log_msg(\\\"Valid resp header = key: {}, valid: {}, value: {}, UDP len: {}, IP len: {}\\n\\\", {hdr.resp.key, hdr.resp.valid_resp, hdr.resp.value,hdr.udp.len, hdr.ipv4.totalLen});"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_9"]
+            },
+            {
+              "type" : "field",
+              "value" : ["ipv4", "totalLen"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 170,
+            "column" : 164,
+            "source_fragment" : "            log_msg(\\\"Valid resp header = key: {}, valid: {}, value: {}, UDP len: {}, IP len: {}\\n\\\", {hdr.resp.key, hdr.resp.valid_resp, hdr.resp.value,hdr.udp.len, hdr.ipv4.totalLen});"
+          }
+        },
+        {
+          "op" : "log_msg",
+          "parameters" : [
+            {
+              "type" : "string",
+              "value" : "Valid resp header = key: {}, valid: {}, value: {}, UDP len: {}, IP len: {}\n"
+            },
+            {
+              "type" : "parameters_vector",
+              "value" : [
+                {
+                  "type" : "field",
+                  "value" : ["scalars", "tmp_5"]
+                },
+                {
+                  "type" : "field",
+                  "value" : ["scalars", "tmp_6"]
+                },
+                {
+                  "type" : "field",
+                  "value" : ["scalars", "tmp_7"]
+                },
+                {
+                  "type" : "field",
+                  "value" : ["scalars", "tmp_8"]
+                },
+                {
+                  "type" : "field",
+                  "value" : ["scalars", "tmp_9"]
+                }
+              ]
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 170,
+            "column" : 12,
+            "source_fragment" : "            log_msg(\\\"Valid resp header = key: {}, valid: {}, value: {}, UDP len: {}, IP len: {}\\n\\\", {hdr.resp.key, hdr.resp.valid_resp, hdr.resp.value,hdr.udp.len, hdr.ipv4.totalLen});"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_10"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "field",
+                    "value" : ["resp", "key"]
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 173,
+            "column" : 27,
+            "source_fragment" : "(bit<32>) hdr.resp.key"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_11"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "|",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "&",
+                      "left" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "<<",
+                          "left" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : "&",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["resp", "value"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0xffffffffff"
+                              }
+                            }
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0x8"
+                          }
+                        }
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0xffffffffff"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "&",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["resp", "valid_resp"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0xffffffffff"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 173,
+            "column" : 50,
+            "source_fragment" : "temp"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.reg_cache"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_10"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_11"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 173,
+            "column" : 11,
+            "source_fragment" : "reg_cache.write((bit<32>) hdr.resp.key,temp)"
+          }
+        }
+      ]
+    },
+    {
+      "name" : "cache180",
+      "id" : 7,
+      "runtime_data" : [],
+      "primitives" : [
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_12"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "field",
+                    "value" : ["req", "key"]
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 180,
+            "column" : 32,
+            "source_fragment" : "(bit<32>) hdr.req.key"
+          }
+        },
+        {
+          "op" : "register_read",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "temp_2"]
+            },
+            {
+              "type" : "register_array",
+              "value" : "MyIngress.reg_cache"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_12"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 180,
+            "column" : 12,
+            "source_fragment" : "reg_cache.read(temp,(bit<32>) hdr.req.key)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "valid_val_1"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "&",
+                      "left" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "&",
+                          "left" : {
+                            "type" : "field",
+                            "value" : ["scalars", "temp_2"]
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0x00000000ff"
+                          }
+                        }
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000000ff"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 181,
+            "column" : 12,
+            "source_fragment" : "bit<8> valid_val =(bit<8>) (temp & 0xFF);"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "val_1"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "&",
+                      "left" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "&",
+                          "left" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : ">>",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["scalars", "temp_2"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x8"
+                              }
+                            }
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0xffffffffff"
+                          }
+                        }
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00ffffffff"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 182,
+            "column" : 12,
+            "source_fragment" : "bit<32> val = (bit<32>)(temp >> 8);"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_13"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "&",
+                      "left" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "&",
+                          "left" : {
+                            "type" : "expression",
+                            "value" : {
+                              "op" : ">>",
+                              "left" : {
+                                "type" : "field",
+                                "value" : ["scalars", "temp_2"]
+                              },
+                              "right" : {
+                                "type" : "hexstr",
+                                "value" : "0x8"
+                              }
+                            }
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0xffffffffff"
+                          }
+                        }
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00ffffffff"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 183,
+            "column" : 74,
+            "source_fragment" : "            log_msg(\\\"Valid req header = {} , UDP len: {}, IP len: {}\\n\\\", {val, hdr.udp.len, hdr.ipv4.totalLen});"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_14"]
+            },
+            {
+              "type" : "field",
+              "value" : ["udp", "len"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 183,
+            "column" : 79,
+            "source_fragment" : "            log_msg(\\\"Valid req header = {} , UDP len: {}, IP len: {}\\n\\\", {val, hdr.udp.len, hdr.ipv4.totalLen});"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_15"]
+            },
+            {
+              "type" : "field",
+              "value" : ["ipv4", "totalLen"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 183,
+            "column" : 92,
+            "source_fragment" : "            log_msg(\\\"Valid req header = {} , UDP len: {}, IP len: {}\\n\\\", {val, hdr.udp.len, hdr.ipv4.totalLen});"
+          }
+        },
+        {
+          "op" : "log_msg",
+          "parameters" : [
+            {
+              "type" : "string",
+              "value" : "Valid req header = {} , UDP len: {}, IP len: {}\n"
+            },
+            {
+              "type" : "parameters_vector",
+              "value" : [
+                {
+                  "type" : "field",
+                  "value" : ["scalars", "tmp_13"]
+                },
+                {
+                  "type" : "field",
+                  "value" : ["scalars", "tmp_14"]
+                },
+                {
+                  "type" : "field",
+                  "value" : ["scalars", "tmp_15"]
+                }
+              ]
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 183,
+            "column" : 12,
+            "source_fragment" : "            log_msg(\\\"Valid req header = {} , UDP len: {}, IP len: {}\\n\\\", {val, hdr.udp.len, hdr.ipv4.totalLen});"
+          }
+        }
+      ]
+    },
+    {
+      "name" : "cache189",
+      "id" : 8,
+      "runtime_data" : [],
+      "primitives" : [
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_16"]
+            },
+            {
+              "type" : "field",
+              "value" : ["ipv4", "srcAddr"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 189,
+            "column" : 54,
+            "source_fragment" : "            log_msg(\\\"Valid IP msg src= {}, dst = {}\\\",{hdr.ipv4.srcAddr,hdr.ipv4.dstAddr} );"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_17"]
+            },
+            {
+              "type" : "field",
+              "value" : ["ipv4", "dstAddr"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 189,
+            "column" : 71,
+            "source_fragment" : "            log_msg(\\\"Valid IP msg src= {}, dst = {}\\\",{hdr.ipv4.srcAddr,hdr.ipv4.dstAddr} );"
+          }
+        },
+        {
+          "op" : "log_msg",
+          "parameters" : [
+            {
+              "type" : "string",
+              "value" : "Valid IP msg src= {}, dst = {}"
+            },
+            {
+              "type" : "parameters_vector",
+              "value" : [
+                {
+                  "type" : "field",
+                  "value" : ["scalars", "tmp_16"]
+                },
+                {
+                  "type" : "field",
+                  "value" : ["scalars", "tmp_17"]
+                }
+              ]
+            }
+          ],
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 189,
+            "column" : 12,
+            "source_fragment" : "            log_msg(\\\"Valid IP msg src= {}, dst = {}\\\",{hdr.ipv4.srcAddr,hdr.ipv4.dstAddr} );"
+          }
+        }
+      ]
+    }
+  ],
+  "pipelines" : [
+    {
+      "name" : "ingress",
+      "id" : 0,
+      "source_info" : {
+        "filename" : "cache.p4",
+        "line" : 112,
+        "column" : 8,
+        "source_fragment" : "MyIngress"
+      },
+      "init_table" : "node_2",
+      "tables" : [
+        {
+          "name" : "tbl_cache170",
+          "id" : 0,
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 170,
+            "column" : 12,
+            "source_fragment" : "            log_msg(\\\"Valid resp header = key: {}, valid: {}, value: {}, UDP len: {}, IP len: {}\\n\\\", {hdr.resp.key, hdr.resp.valid_resp, hdr.resp.value,hdr.udp.len, hdr.ipv4.totalLen});"
+          },
+          "key" : [],
+          "match_type" : "exact",
+          "type" : "simple",
+          "max_size" : 1024,
+          "with_counters" : false,
+          "support_timeout" : false,
+          "direct_meters" : null,
+          "action_ids" : [6],
+          "actions" : ["cache170"],
+          "base_default_next" : "node_9",
+          "next_tables" : {
+            "cache170" : "node_9"
+          },
+          "default_entry" : {
+            "action_id" : 6,
+            "action_const" : true,
+            "action_data" : [],
+            "action_entry_const" : true
+          }
+        },
+        {
+          "name" : "MyIngress.key_cache",
+          "id" : 1,
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 157,
+            "column" : 10,
+            "source_fragment" : "key_cache"
+          },
+          "key" : [
+            {
+              "match_type" : "exact",
+              "name" : "hdr.req.key",
+              "target" : ["req", "key"],
+              "mask" : null
+            }
+          ],
+          "match_type" : "exact",
+          "type" : "simple",
+          "max_size" : 1024,
+          "with_counters" : false,
+          "support_timeout" : false,
+          "direct_meters" : null,
+          "action_ids" : [2, 1],
+          "actions" : ["MyIngress.cache_hit", "NoAction"],
+          "base_default_next" : "tbl_cache180",
+          "next_tables" : {
+            "MyIngress.cache_hit" : "tbl_cache180",
+            "NoAction" : "tbl_cache180"
+          },
+          "default_entry" : {
+            "action_id" : 1,
+            "action_const" : false,
+            "action_data" : [],
+            "action_entry_const" : false
+          }
+        },
+        {
+          "name" : "tbl_cache180",
+          "id" : 2,
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 180,
+            "column" : 12,
+            "source_fragment" : "reg_cache.read(temp,(bit<32>) hdr.req.key); ..."
+          },
+          "key" : [],
+          "match_type" : "exact",
+          "type" : "simple",
+          "max_size" : 1024,
+          "with_counters" : false,
+          "support_timeout" : false,
+          "direct_meters" : null,
+          "action_ids" : [7],
+          "actions" : ["cache180"],
+          "base_default_next" : "node_7",
+          "next_tables" : {
+            "cache180" : "node_7"
+          },
+          "default_entry" : {
+            "action_id" : 7,
+            "action_const" : true,
+            "action_data" : [],
+            "action_entry_const" : true
+          }
+        },
+        {
+          "name" : "tbl_cache_hit",
+          "id" : 3,
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 185,
+            "column" : 16,
+            "source_fragment" : "cache_hit(valid_val, val)"
+          },
+          "key" : [],
+          "match_type" : "exact",
+          "type" : "simple",
+          "max_size" : 1024,
+          "with_counters" : false,
+          "support_timeout" : false,
+          "direct_meters" : null,
+          "action_ids" : [3],
+          "actions" : ["MyIngress.cache_hit"],
+          "base_default_next" : "node_9",
+          "next_tables" : {
+            "MyIngress.cache_hit" : "node_9"
+          },
+          "default_entry" : {
+            "action_id" : 3,
+            "action_const" : true,
+            "action_data" : [],
+            "action_entry_const" : true
+          }
+        },
+        {
+          "name" : "tbl_cache189",
+          "id" : 4,
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 189,
+            "column" : 12,
+            "source_fragment" : "            log_msg(\\\"Valid IP msg src= {}, dst = {}\\\",{hdr.ipv4.srcAddr,hdr.ipv4.dstAddr} );"
+          },
+          "key" : [],
+          "match_type" : "exact",
+          "type" : "simple",
+          "max_size" : 1024,
+          "with_counters" : false,
+          "support_timeout" : false,
+          "direct_meters" : null,
+          "action_ids" : [8],
+          "actions" : ["cache189"],
+          "base_default_next" : "MyIngress.ipv4_lpm",
+          "next_tables" : {
+            "cache189" : "MyIngress.ipv4_lpm"
+          },
+          "default_entry" : {
+            "action_id" : 8,
+            "action_const" : true,
+            "action_data" : [],
+            "action_entry_const" : true
+          }
+        },
+        {
+          "name" : "MyIngress.ipv4_lpm",
+          "id" : 5,
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 145,
+            "column" : 10,
+            "source_fragment" : "ipv4_lpm"
+          },
+          "key" : [
+            {
+              "match_type" : "lpm",
+              "name" : "hdr.ipv4.dstAddr",
+              "target" : ["ipv4", "dstAddr"],
+              "mask" : null
+            }
+          ],
+          "match_type" : "lpm",
+          "type" : "simple",
+          "max_size" : 1024,
+          "with_counters" : false,
+          "support_timeout" : false,
+          "direct_meters" : null,
+          "action_ids" : [5, 4, 0],
+          "actions" : ["MyIngress.ipv4_forward", "MyIngress.drop", "NoAction"],
+          "base_default_next" : null,
+          "next_tables" : {
+            "MyIngress.ipv4_forward" : null,
+            "MyIngress.drop" : null,
+            "NoAction" : null
+          },
+          "default_entry" : {
+            "action_id" : 4,
+            "action_const" : false,
+            "action_data" : [],
+            "action_entry_const" : false
+          }
+        }
+      ],
+      "action_profiles" : [],
+      "conditionals" : [
+        {
+          "name" : "node_2",
+          "id" : 0,
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 169,
+            "column" : 11,
+            "source_fragment" : "hdr.resp.isValid()"
+          },
+          "expression" : {
+            "type" : "expression",
+            "value" : {
+              "op" : "d2b",
+              "left" : null,
+              "right" : {
+                "type" : "field",
+                "value" : ["resp", "$valid$"]
+              }
+            }
+          },
+          "true_next" : "tbl_cache170",
+          "false_next" : "node_4"
+        },
+        {
+          "name" : "node_4",
+          "id" : 1,
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 175,
+            "column" : 16,
+            "source_fragment" : "hdr.req.isValid()"
+          },
+          "expression" : {
+            "type" : "expression",
+            "value" : {
+              "op" : "d2b",
+              "left" : null,
+              "right" : {
+                "type" : "field",
+                "value" : ["req", "$valid$"]
+              }
+            }
+          },
+          "true_next" : "MyIngress.key_cache",
+          "false_next" : "node_9"
+        },
+        {
+          "name" : "node_7",
+          "id" : 2,
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 184,
+            "column" : 15,
+            "source_fragment" : "valid_val != 0"
+          },
+          "expression" : {
+            "type" : "expression",
+            "value" : {
+              "op" : "!=",
+              "left" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "&",
+                      "left" : {
+                        "type" : "expression",
+                        "value" : {
+                          "op" : "&",
+                          "left" : {
+                            "type" : "field",
+                            "value" : ["scalars", "temp_2"]
+                          },
+                          "right" : {
+                            "type" : "hexstr",
+                            "value" : "0x00000000ff"
+                          }
+                        }
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000000ff"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xff"
+                  }
+                }
+              },
+              "right" : {
+                "type" : "hexstr",
+                "value" : "0x00"
+              }
+            }
+          },
+          "true_next" : "tbl_cache_hit",
+          "false_next" : "node_9"
+        },
+        {
+          "name" : "node_9",
+          "id" : 3,
+          "source_info" : {
+            "filename" : "cache.p4",
+            "line" : 188,
+            "column" : 12,
+            "source_fragment" : "hdr.ipv4.isValid()"
+          },
+          "expression" : {
+            "type" : "expression",
+            "value" : {
+              "op" : "d2b",
+              "left" : null,
+              "right" : {
+                "type" : "field",
+                "value" : ["ipv4", "$valid$"]
+              }
+            }
+          },
+          "false_next" : null,
+          "true_next" : "tbl_cache189"
+        }
+      ]
+    },
+    {
+      "name" : "egress",
+      "id" : 1,
+      "source_info" : {
+        "filename" : "cache.p4",
+        "line" : 196,
+        "column" : 8,
+        "source_fragment" : "MyEgress"
+      },
+      "init_table" : null,
+      "tables" : [],
+      "action_profiles" : [],
+      "conditionals" : []
+    }
+  ],
+  "checksums" : [
+    {
+      "name" : "cksum",
+      "id" : 0,
+      "source_info" : {
+        "filename" : "cache.p4",
+        "line" : 204,
+        "column" : 8,
+        "source_fragment" : "update_checksum( ..."
+      },
+      "target" : ["ipv4", "hdrChecksum"],
+      "type" : "generic",
+      "calculation" : "calc",
+      "verify" : false,
+      "update" : true,
+      "if_cond" : {
+        "type" : "expression",
+        "value" : {
+          "op" : "d2b",
+          "left" : null,
+          "right" : {
+            "type" : "field",
+            "value" : ["ipv4", "$valid$"]
+          }
+        }
+      }
+    }
+  ],
+  "force_arith" : [],
+  "extern_instances" : [],
+  "field_aliases" : [
+    [
+      "queueing_metadata.enq_timestamp",
+      ["standard_metadata", "enq_timestamp"]
+    ],
+    [
+      "queueing_metadata.enq_qdepth",
+      ["standard_metadata", "enq_qdepth"]
+    ],
+    [
+      "queueing_metadata.deq_timedelta",
+      ["standard_metadata", "deq_timedelta"]
+    ],
+    [
+      "queueing_metadata.deq_qdepth",
+      ["standard_metadata", "deq_qdepth"]
+    ],
+    [
+      "intrinsic_metadata.ingress_global_timestamp",
+      ["standard_metadata", "ingress_global_timestamp"]
+    ],
+    [
+      "intrinsic_metadata.egress_global_timestamp",
+      ["standard_metadata", "egress_global_timestamp"]
+    ],
+    [
+      "intrinsic_metadata.mcast_grp",
+      ["standard_metadata", "mcast_grp"]
+    ],
+    [
+      "intrinsic_metadata.egress_rid",
+      ["standard_metadata", "egress_rid"]
+    ],
+    [
+      "intrinsic_metadata.priority",
+      ["standard_metadata", "priority"]
+    ]
+  ],
+  "program" : "cache.p4",
+  "__meta__" : {
+    "version" : [2, 23],
+    "compiler" : "https://github.com/p4lang/p4c"
+  }
+}

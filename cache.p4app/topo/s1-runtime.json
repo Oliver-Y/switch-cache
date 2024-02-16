@@ -1,0 +1,64 @@
+{
+  "target": "bmv2",
+  "p4info": "build/cache.p4.p4info.txt",
+  "bmv2_json": "build/cache.json",
+  "table_entries": [
+    {
+      "table": "MyIngress.ipv4_lpm",
+      "match": {
+        "hdr.ipv4.dstAddr": ["10.0.1.1", 32]
+      },
+      "action_name": "MyIngress.ipv4_forward",
+      "action_params": {
+        "dstAddr": "08:00:00:00:01:11",
+        "port": 1
+      }
+    },
+
+    {
+      "table": "MyIngress.key_cache",
+      "default_action": true,
+      "action_name": "NoAction",
+      "action_params": { }
+    },
+    {
+      "table": "MyIngress.key_cache",
+      "match": {
+        "hdr.req.key": [3]
+      },
+      "action_name": "MyIngress.cache_hit",
+      "action_params": {
+        "valid_val": 1,
+        "val": 21
+      }
+    },
+    {
+      "table": "MyIngress.key_cache",
+      "match": {
+        "hdr.req.key": [5]
+      },
+      "action_name": "MyIngress.cache_hit",
+      "action_params": {
+        "valid_val": 0,
+        "val": 55 
+      }
+    },
+    {
+      "table": "MyIngress.ipv4_lpm",
+      "default_action": true,
+      "action_name": "MyIngress.drop",
+      "action_params": { }
+    },
+    {
+      "table": "MyIngress.ipv4_lpm",
+      "match": {
+        "hdr.ipv4.dstAddr": ["10.0.2.2", 32]
+      },
+      "action_name": "MyIngress.ipv4_forward",
+      "action_params": {
+        "dstAddr": "08:00:00:00:02:22",
+        "port": 2
+      }
+    }
+  ]
+}
