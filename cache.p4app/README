@@ -1,0 +1,31 @@
+How to build: 
+run "make" 
+
+Default Table Cache State: 
+Currently the topology populates the key 3 with value 21 and key 5 with no response in the table cache. So the server will not recieve either messages from the client.
+Additional table entries can be added by providing the correct arguments to cache_hit. If valid_val == 1, then its a valid response and the value will be returned. 
+Else if valid_val is 0, then the table cache will always return NotFound. 
+
+How to test: 
+xterm h1 h2 
+Run python3 client.py 10.0.2.2 <key_val> on h1 
+Run python3 server.py <server_pairs> 
+
+
+
+Test cases tested: 
+I tested with the default table cache state above, in addition adding in run_time server pairs in the server with 6=0 and 255=55: python3 server.py 6=0 255=55 
+and from the client I tested keys 1,2,3,5,6,255. 
+Aside from key 3 and 5 which never got to the server (because it was stored in the table cache), 1,2,5,255 all gave the right responses while also only querying the server once. 
+I assume any other key thats "NOT FOUND" should not be stored in the register cache and therefore all other keys (such as 4) would query the server multiple times until a value
+was given for it. 
+
+
+
+Implementation Note: 
+- I bitshift the value in the register cache over by 8 to make space for the valid bit. I thought in this way it would reduce the memory usage so I wouldn't have ot make
+seperate register caches for both valid bits and the value themselves. Not sure if tehre was a better way to do it. 
+- Also for the parser, I wasn't quite sure how to make the state machine branch out like paralelly. So I had a parse_resp_option state but was wondering if it was possibel to code 
+it in a way to not have that redundancy.  
+
+
